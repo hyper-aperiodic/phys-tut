@@ -30,7 +30,7 @@ from physics_tutor.core import generate
 
 # ── Page config ───────────────────────────────────────────────────────────────
 # Must be the first Streamlit call in the script. "wide" uses the full browser
-# width; the sidebar starts open (and the CSS below stops it being closed).
+# width; the sidebar starts open (and on desktop the CSS below stops it being closed).
 st.set_page_config(
     page_title="PHYS108 Tutor",
     page_icon="∇",
@@ -49,7 +49,8 @@ st.set_page_config(
 #       :has() selector styles any container holding that marker. This is how
 #       the question box and step cards get their own look.
 #   stSidebarCollapseButton / stExpandSidebarButton
-#       hidden, so the sidebar is always visible. Streamlit remembers a
+#       hidden on screens 768px and wider, so the sidebar is always visible
+#       there; phones keep the buttons (see the CSS). Streamlit remembers a
 #       collapsed sidebar in the browser and ignores initial_sidebar_state on
 #       reload, so the [aria-expanded="false"] rule also forces a "collapsed"
 #       sidebar back open. These test-ids are Streamlit-version specific
@@ -190,13 +191,17 @@ section[data-testid="stSidebar"] {
 
 /* Keep the sidebar permanently open: no collapse / expand controls, and undo
    the collapsed styling (zero width, slid off-screen) in case the browser
-   remembers it as collapsed from an earlier visit */
-[data-testid="stSidebarCollapseButton"],
-[data-testid="stExpandSidebarButton"] { display: none !important; }
-section[data-testid="stSidebar"][aria-expanded="false"] {
-    transform: none !important;
-    min-width: 200px !important;
-    max-width: 600px !important;
+   remembers it as collapsed from an earlier visit. Desktop only: below 768px
+   Streamlit treats the screen as mobile, collapses the sidebar by itself and
+   lays it over the page, so phones keep the normal open / close buttons. */
+@media (min-width: 768px) {
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stExpandSidebarButton"] { display: none !important; }
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        transform: none !important;
+        min-width: 200px !important;
+        max-width: 600px !important;
+    }
 }
 
 /* Hide the wrapper around 0-height scroll-helper iframes */

@@ -1,0 +1,11 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.tmp.*
+.vscode/
+dist/
+build/
+*.egg-info/
+/docs/docs-venv
